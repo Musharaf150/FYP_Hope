@@ -18,12 +18,13 @@ const Header = () => {
 
       
           <nav className="md:flex-between hidden w-full max-w-xs">
-            <NavItems/>
+              <NavItems/>
           </nav>
         
 
-        <div className="flex w-80 justify-end gap-3">
+        <div className="flex w-80 justify-end">
           <SignedIn>
+            <Link href="/dashboard" className="md:flex-between hidden max-w-xs mr-2 p-medium-16 whitespace-nowrap">Dashboard</Link>
             <UserButton afterSignOutUrl="/" />
           </SignedIn>
         
