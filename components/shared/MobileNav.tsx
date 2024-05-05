@@ -27,10 +27,10 @@ const MobileNav = () => {
         <SheetContent className="flex flex-col gap-6 bg-white 
         md:hidden">
           <Image
-            src="/assets/images/logo.svg"
+            src="/assets/images/logo.png"
             alt="logo"
-            width={30}
-            height={10} />
+            width={50}
+            height={20} />
           <Separator className="border border-gray-500" />
           <NavItems />
         </SheetContent>
