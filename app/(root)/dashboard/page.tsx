@@ -8,7 +8,7 @@ const Dashboard = () => {
   return (
     <div className='wrapper flex flex-col gap-5 w-full'>
         <h2 className='h2-bold'>Dashboard</h2>
-      <section className='grid w-full grid-cols-1 gap-4 gap-x-8 transition-all
+      <section className='grid w-full grid-cols-1 gap-4 gap-x-4 transition-all
       sm:grid-cols-2 xl:grid-cols-4'>
         {data.map((d, i)=>
         <Card 
