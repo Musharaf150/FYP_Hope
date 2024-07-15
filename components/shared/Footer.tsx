@@ -6,12 +6,17 @@ const Footer = () => {
     <footer className="border-t">
       <div className="flex-center wrapper flex-between flex 
       flex-col gap-4 p-5 text-center sm:flex-row">
+        <div className="flex items-center">
         <Link href="/">
           <Image 
-          src="/assets/images/logo.png"
+          src="/assets/images/logo.svg"
           alt="logo"
-          width={50} height={20}/>
+          width={50} height={50}/>
         </Link>
+        <h1 className="font-bold">
+          Hope Foundation
+        </h1>
+        </div>
 
         <p>2023 Hope Foundation. All Rights Reserved.</p>
       </div>

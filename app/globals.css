@@ -85,7 +85,7 @@ body {
 /* ========================================== TAILWIND STYLES */
 @layer utilities {
   .wrapper {
-    @apply max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 w-full;
+    @apply max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-10 w-full;
   }
 
   .flex-center {
@@ -232,7 +232,7 @@ body {
 
 /* ========================================== CLERK STYLES */
 .cl-logoImage {
-  height: 38px;
+  height: 70px;
 }
 
 .cl-userButtonBox {
@@ -240,7 +240,7 @@ body {
 }
 
 .cl-userButtonOuterIdentifier {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .cl-userButtonPopoverCard {
@@ -250,7 +250,7 @@ body {
 .cl-formButtonPrimary:hover,
 .cl-formButtonPrimary:focus,
 .cl-formButtonPrimary:active {
-  background-color: #705CF7
+  background-color: #5074e9;
 }
 
 /* ========================================== REACT-DATEPICKER STYLES */

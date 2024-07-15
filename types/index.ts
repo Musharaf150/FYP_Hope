@@ -145,3 +145,9 @@ export type CreateUserParams = {
     params: { id: string }
     searchParams: { [key: string]: string | string[] | undefined }
   }
+
+  export type serviceCardProps = {
+    title: string
+    icon: string
+    bgColor: string
+  }
