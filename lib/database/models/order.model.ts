@@ -1,4 +1,5 @@
 import { Schema, model, models, Document } from 'mongoose'
+import { ReactNode } from 'react'
 
 export interface IOrder extends Document {
   createdAt: Date
@@ -16,12 +17,17 @@ export interface IOrder extends Document {
 }
 
 export type IOrderItem = {
+  stripeId: ReactNode
   _id: string
   totalAmount: string
   createdAt: Date
   eventTitle: string
   eventId: string
-  buyer: string
+  buyer: {
+    _id: string
+    firstName: string
+    lastName: string
+  }
 }
 
 const OrderSchema = new Schema({

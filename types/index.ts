@@ -128,6 +128,126 @@ export type CreateUserParams = {
     limit?: number
     page: string | number | null
   }
+
+  // ====== COMPAIGN PARAMS
+export type CreateCompaignParams = {
+  userId: string
+  compaign: {
+    title: string
+    description: string
+    imageUrl: string
+    startDateTime: Date
+    endDateTime: Date
+    comCategoryId?: string
+   goal: string
+   isZakatEligible: boolean
+  }
+  path: string
+}
+
+export type UpdateCompaignParams = {
+  userId: string
+  compaign: {
+    _id: string | undefined
+    title: string
+    description: string
+    imageUrl: string
+    startDateTime: Date
+    endDateTime: Date
+    comCategoryId: string
+   goal: string
+   isZakatEligible: boolean
+  }
+  path: string
+}
+
+export type DeleteCompaignParams = {
+  compaignId: string
+  path: string
+}
+
+export type GetAllCompaignsParams = {
+  query: string
+  comCategory: string
+  limit: number
+  page: number
+}
+
+export type GetCompaignsByUserParams = {
+  userId: string
+  limit?: number
+  page: number
+}
+
+export type GetRelatedCompaignsByComCategoryParams = {
+  comCategoryId: string
+  compaignId: string
+  limit?: number
+  page: number | string
+}
+
+export type Compaign = {
+  _id: string
+  title: string
+  description: string
+  goal: string
+  isZakatEligible:boolean
+  imageUrl: string
+  startDateTime: Date
+  endDateTime: Date
+  organizer: {
+    _id: string
+    firstName: string
+    lastName: string
+  }
+  comCategory: {
+    _id: string
+    name: string
+  }
+}
+
+// ====== COMCATEGORY PARAMS
+export type CreateComCategoryParams = {
+  comCategoryName: string
+}
+
+// ====== COMRAISED PARAMS
+export type CheckoutComRaisedParams = {
+  compaignTitle: string
+  compaignId: string
+  goal: string
+  donorId: string
+}
+
+export type CreateComRaisedParams = {
+  stripeId: string
+  compaignId: string
+  donorId: string
+  raisedAmount: string
+  createdAt: Date
+}
+
+export type ComRaisedProps ={
+  createdAt: Date,
+  stripeId: String,
+  raisedAmount: String,
+  compaign: {
+    compaignTitle: '$compaign.title',
+    compaignId: '$compaign._id',
+  },
+  donorId: string,
+}
+export type GetByCompaignParams = {
+  compaignId: string
+  searchString: string
+}
+
+export type GetComRaisedByUserParams = {
+  userId: string | null
+  limit?: number
+  page: string | number | null
+}
+
   
   // ====== URL QUERY PARAMS
   export type UrlQueryParams = {

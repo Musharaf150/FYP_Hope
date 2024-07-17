@@ -5,11 +5,11 @@ export const headerLinks = [
     },
     {
       label: 'Events',
-      route: '/events',
+      route: '/#events',
     },
     {
       label: 'Campaigns',
-      route: '/campaigns',
+      route: '/#campaigns',
     },
     {
       label: 'About',

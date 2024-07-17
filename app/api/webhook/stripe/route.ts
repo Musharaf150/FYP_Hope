@@ -1,39 +1,100 @@
-import stripe from 'stripe'
-import { NextResponse } from 'next/server'
-import { createOrder } from '@/lib/actions/order.actions'
+// Importing necessary modules
+import Stripe from 'stripe';
+import { NextResponse } from 'next/server';
+import { createOrder } from '@/lib/actions/order.actions';
+import { handleError } from '@/lib/utils';
+import { createComRaised } from '@/lib/actions/comraised.actions';
 
+// Initialize Stripe with your secret key
+const stripe = new Stripe(process.env.STRIPE_WEBHOOK_SECRET!, {
+  apiVersion: '2024-06-20',
+});
+
+// Define the handler for POST requests
 export async function POST(request: Request) {
-  const body = await request.text()
+  // Read the request body
+  const body = await request.text();
 
-  const sig = request.headers.get('stripe-signature') as string
-  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!
+  // Retrieve the Stripe signature from the headers
+  const sig = request.headers.get('stripe-signature') as string;
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
-  let event
+  let event;
+  let compaign;
 
   try {
-    event = stripe.webhooks.constructEvent(body, sig, endpointSecret)
+    // Construct the Stripe event
+    compaign = stripe.webhooks.constructEvent(body, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
   } catch (err) {
-    return NextResponse.json({ message: 'Webhook error', error: err })
+    // Return an error response if the webhook verification fails
+    return NextResponse.json({ message: 'Webhook error', error: err }, { status: 400 });
   }
 
-  // Get the ID and type
-  const eventType = event.type
+  // Get the event type
+  const eventType = event.type;
+  const compaignType = compaign.type;
 
-  // CREATE
+  // Handle the 'checkout.session.completed' event
   if (eventType === 'checkout.session.completed') {
-    const { id, amount_total, metadata } = event.data.object
+    const { id, amount_total, metadata } = event.data.object;
 
+    // Create an order object
     const order = {
       stripeId: id,
       eventId: metadata?.eventId || '',
       buyerId: metadata?.buyerId || '',
       totalAmount: amount_total ? (amount_total / 100).toString() : '0',
       createdAt: new Date(),
-    }
+    };
 
-    const newOrder = await createOrder(order)
-    return NextResponse.json({ message: 'OK', order: newOrder })
+    // Create an order object
+    const comraised = {
+      stripeId: id,
+      compaignId: metadata?.compaignId || '',
+      donorId: metadata?.donorId || '',
+      raisedAmount: amount_total ? (amount_total / 100).toString() : '0',
+      createdAt: new Date(),
+    };
+
+    try {
+      // Save the new order to your database
+      const newComraised =await createComRaised(comraised)
+      const newOrder = await createOrder(order);
+      console.log(newOrder);
+      console.log(newComraised);
+      // Return a success response
+      return NextResponse.json({ message: 'OK', order: newOrder });
+    } catch (error) {
+      // Return an error response if order creation fails
+      handleError(error)
+    }
   }
 
-  return new Response('', { status: 200 })
+  if(compaignType === 'checkout.session.completed'){
+    const { id, amount_total, metadata } = compaign.data.object;
+
+    // Create an order object
+    const comraised = {
+      stripeId: id,
+      compaignId: metadata?.compaignId || '',
+      donorId: metadata?.donorId || '',
+      raisedAmount: amount_total ? (amount_total / 100).toString() : '0',
+      createdAt: new Date(),
+    };
+
+    try {
+      // Save the new order to your database
+      const newComraised =await createComRaised(comraised)
+      console.log(newComraised);
+      // Return a success response
+      return NextResponse.json({ message: 'OK', comraised: newComraised });
+    } catch (error) {
+      // Return an error response if order creation fails
+      handleError(error)
+    }
+  }
+
+  // Return a success response for all other event types
+  return new Response('', { status: 200 });
 }

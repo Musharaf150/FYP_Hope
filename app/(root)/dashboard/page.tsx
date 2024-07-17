@@ -15,8 +15,10 @@ const Dashboard = () => {
         key={i}
         label={d.label}
         amount={d.amount}
-        icon={d.icon}/>
+        icon={d.icon}
+        />
         )}
+        
       </section>
       <section className='grid grid-cols-1 gap-4 transition-all lg:grid-cols-2'>
         <CardContent>

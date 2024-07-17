@@ -3,15 +3,15 @@ import { loadStripe } from '@stripe/stripe-js';
 
 
 import { Button } from '../ui/button'
-import { IEvent } from '@/lib/database/models/event.model'
-import { checkoutOrder } from '@/lib/actions/order.actions';
+import { ICompaign } from '@/lib/database/models/compaign.model';
+import { checkoutComRaised } from '@/lib/actions/comraised.actions';
 
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-const Checkout = ({event, userId}: {event: IEvent, userId: string}) => {
+const DonateClick = ({compaign, userId}: {compaign: ICompaign, userId: string}) => {
     useEffect(() => {
         // Check to see if this is a redirect back from Checkout
         const query = new URLSearchParams(window.location.search);
@@ -26,25 +26,24 @@ const Checkout = ({event, userId}: {event: IEvent, userId: string}) => {
 
 
     const onCheckout = async () =>{
-        const order = {
-            eventTitle: event.title,
-            eventId: event._id,
-            price: event.price,
-            isFree: event.isFree,
-            buyerId: userId
+        const comraised = {
+            compaignTitle: compaign.title,
+            compaignId: compaign._id,
+            goal: compaign.goal,
+            donorId: userId
         }
 
-        await checkoutOrder(order);
+        await checkoutComRaised(comraised);
      
     }
 
   return (
     <form action={onCheckout} method='post'>
         <Button type='submit' role='link' size="lg" className='button sm:w-fit'>
-            {event.isFree ? "Get Ticket" : "Buy Ticket"}
+            Donate Now
         </Button>
     </form>
   )
 }
 
-export default Checkout
+export default DonateClick

@@ -4,15 +4,35 @@ import Image from "next/image";
 import Link from "next/link";
 import { getAllEvents } from '@/lib/actions/event.actions';
 import Services from "@/components/shared/Services";
+import Search from "@/components/shared/Search";
+import { SearchParamProps } from "@/types";
+import CategoryFilter from "@/components/shared/CategoryFilter";
+import { getAllCompaigns } from "@/lib/actions/compaign.actions";
+import CompaignCollection from "@/components/shared/CompaignCollection";
 
 
-export default async function Home() {
+export default async function Home({searchParams}: SearchParamProps) {
+  const page = Number(searchParams?.page) || 1;
+  const searchText = (searchParams?.query as string) ||" ";
+  const category = (searchParams?.category as string) || '';
+  const comCategory = (searchParams?.category as string) || '';
+
+
   const events = await getAllEvents({
-    query:'',
-    category: '',
-    page: 1,
+    query:searchText,
+    category,
+    page,
     limit: 6
   });
+
+  const compaigns = await getAllCompaigns({
+    query:'',
+    comCategory: '',
+    page:1,
+    limit: 6,
+  });
+
+  console.log(compaigns)
 
 
   return (
@@ -46,6 +66,11 @@ export default async function Home() {
 
     <section id="events" className="wrapper my-8 flex flex-col gap-8 md:gap-12">
         <h2 className="h2-bold">Thousands of Events</h2>
+
+        <div className="flex w-full flex-col gap-5 md:flex-row">
+          <Search/>
+          <CategoryFilter/>
+        </div>
         
         <Collection 
           data={events?.data}
@@ -67,6 +92,26 @@ export default async function Home() {
         
       </div>
     </section> */}
+
+<section id="events" className="wrapper my-8 flex flex-col gap-8 md:gap-12">
+        <h2 className="h2-bold">Thousands of Compaigns</h2>
+
+        <div className="flex w-full flex-col gap-5 md:flex-row">
+          <Search/>
+          <CategoryFilter/>
+        </div>
+        
+        <CompaignCollection
+          data={compaigns?.data}
+          emptyTitle="No Events Found"
+          emptyStateSubtext="Come back later"
+          collectionType="All_Compaigns"
+          limit={6}
+          page={2}
+          totalPages={compaigns?.totalPages}
+        />
+
+        </section>
     </>
   )
 }

@@ -1,23 +1,23 @@
-import { IEvent } from '@/lib/database/models/event.model'
 import React from 'react'
-import EventCard from "./EventCard"
+import { ICompaign } from '@/lib/database/models/compaign.model'
+import CompaignCard from './CompaignCard'
 
 
 
 
 type CollectionProps = {
-    data: IEvent[],
+    data: ICompaign[],
     emptyTitle: string,
     emptyStateSubtext: string,
     limit: number,
     page: number | string,
     totalPages?: number,
     urlParamName?: string,
-    collectionType?: 'Events_Organized' | 'My_Tickets' | 'All_Events'
+    collectionType?: 'Compaign_Organized' | 'My_Compaigns' | 'All_Compaigns'
   }
   
 
-const Collection = ({
+const CompaignsCollection = ({
     data,
     emptyTitle,
     emptyStateSubtext,
@@ -26,21 +26,18 @@ const Collection = ({
     collectionType,
     urlParamName,
   }: CollectionProps) => {
-
-    console.log(data)
   return (
     <>
     {data.length > 0 ? (
       <div className="flex flex-col items-center gap-10 px-5 sm:px-8 py-7 lg:py-12">
         <ul className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:gap-10">
-          {data.map((event) => {
-            const hasOrderLink = collectionType === 'Events_Organized';
-            const hidePrice = collectionType === 'My_Tickets';
+          {data.map((compaign) => {
+            const hasOrderLink = collectionType === 'Compaign_Organized';
+            const hidePrice = collectionType === 'My_Compaigns';
 
             return (
-              
-              <li key={event._id} className="flex justify-center">
-                <EventCard event={event} hasOrderLink={hasOrderLink} hidePrice={hidePrice} />
+              <li key={compaign._id} className="flex justify-center">
+                <CompaignCard compaign={compaign}/>
               </li>
             )
           })}
@@ -60,4 +57,4 @@ const Collection = ({
   )
 }
 
-export default Collection
+export default CompaignsCollection

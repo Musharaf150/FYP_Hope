@@ -4,17 +4,20 @@ export const data = [
     {
       label: "Total Donations",
       amount: "$45,231",
-      icon: DollarSign
+      icon: DollarSign,
+      
     },
     {
         label: "Participated Events",
         amount: "3",
-        icon: CalendarDays
+        icon: CalendarDays,
+        route: '/dashboard/mytickets'
     },
     {
         label: "Donated Campaigns",
         amount: "5",
-        icon: Caravan
+        icon: Caravan,
+        route: '/dashboard/mytickets'
     },
 ];
 export const brdata= [
