@@ -257,14 +257,14 @@ export type CheckoutTotalDonationParams = {
 export type CreateTotalDonationParams = {
   stripeId: string
   donorId: string
-  amount: string
+  amount: number
   createdAt: Date
 }
 
 export type TotalDonationProps ={
   createdAt: Date,
   stripeId: String,
-  amount: String,
+  amount: number,
   donor: {
     donorEmail: '$donor.email',
     donorFirstname: '$donor.firstName',

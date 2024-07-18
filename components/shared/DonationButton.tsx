@@ -9,7 +9,7 @@ import { checkoutTotalDonation } from '@/lib/actions/totaldonation.actions';
 // recreating the `Stripe` object on every render.
 loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-const DonationButton = ({donor, userId}: {donor: ITotaldonation, userId: string}) => {
+const DonationButton = ({userId}: {donor: ITotaldonation, userId: string}) => {
     useEffect(() => {
         // Check to see if this is a redirect back from Checkout
         const query = new URLSearchParams(window.location.search);

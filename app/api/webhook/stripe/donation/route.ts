@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/database';
 import Totaldonation from '@/lib/database/models/totaldonation.model';
+import { createTotalDonation } from '@/lib/actions/totaldonation.actions';
 
 // Initialize Stripe with your secret key
 const stripe = new Stripe(process.env.STRIPE_WEBHOOK_SECRET_DONATION!, {
@@ -37,14 +38,27 @@ export async function POST(request: Request) {
       const donorId = paymentIntent.metadata.donorId;
       const amount = paymentIntent.amount_received;
 
-      await connectToDatabase();
+      const totaldonation = {
+        stripeId: paymentIntent.id,
+        donorId: donorId,
+        amount: amount/100,
+        createdAt: new Date()
+      
+      }
+      const newtotaldonation = await createTotalDonation(totaldonation)
+      return NextResponse.json({message: 'OK', totaldonation:newtotaldonation})
 
-      // Update the donation record in your database
-      await Totaldonation.findOneAndUpdate(
-        { stripeId: paymentIntent.id },
-        { totalDonation: amount / 100 }, // Stripe amount is in cents
-        { new: true }
-      );
+      // await connectToDatabase();
+
+      // // Update the donation record in your database
+      // await Totaldonation.findOneAndUpdate(
+      //   { stripeId: paymentIntent.id },
+      //   {
+      //     donorId: donorId
+      //   },
+      //   { totalDonation: amount / 100 }, // Stripe amount is in cents
+      //   { new: true }
+      // );
 
       console.log(`PaymentIntent for ${amount} was successful!`);
       break;
