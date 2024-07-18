@@ -167,10 +167,10 @@ export type DeleteCompaignParams = {
 }
 
 export type GetAllCompaignsParams = {
-  querys: string
+  query: string
   comCategory: string
   limit: number
-  pages: number
+  page: number
 }
 
 export type GetCompaignsByUserParams = {

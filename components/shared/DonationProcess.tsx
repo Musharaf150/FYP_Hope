@@ -6,7 +6,7 @@ import React from 'react'
 import { ITotaldonation } from '@/lib/database/models/totaldonation.model'
 import DonationButton from './DonationButton'
 
-const DonaitonProcess = ({donor}:{ donor: ITotaldonation}) => {
+const DonationProcess = ({donor}:{ donor: ITotaldonation}) => {
     const {user} = useUser();
     const userId = user?.publicMetadata.userId as string;
 
@@ -24,4 +24,4 @@ const DonaitonProcess = ({donor}:{ donor: ITotaldonation}) => {
   )
 }
 
-export default DonaitonProcess
+export default DonationProcess

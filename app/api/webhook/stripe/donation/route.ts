@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_DONATION!;
 
   let event;
-
+ 
   try {
     // Construct the Stripe event
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);

@@ -5,26 +5,16 @@ import Link from "next/link";
 import { getAllEvents } from '@/lib/actions/event.actions';
 import Services from "@/components/shared/Services";
 import Search from "@/components/shared/Search";
-import { SearchParamsProps } from "@/types";
+import { SearchParamProps } from "@/types";
 import CategoryFilter from "@/components/shared/CategoryFilter";
 import { getAllCompaigns } from "@/lib/actions/compaign.actions";
 import CompaignCollection from "@/components/shared/CompaignCollection";
-import DonaitonProcess from "@/components/shared/DonationProcess";
-import { auth } from "@clerk/nextjs/server";
-import { ITotaldonation } from "@/lib/database/models/totaldonation.model";
 
 
-type HomeProps = {
-  donor: ITotaldonation
-  searchParams: SearchParamsProps
-}
-
-export default async function Home({searchParams, donor}:HomeProps) {
+export default async function Home({searchParams}: SearchParamProps) {
   const page = Number(searchParams?.page) || 1;
-  const pages = Number(searchParams?.page) || 1;
   const searchText = (searchParams?.query as string) ||" ";
   const category = (searchParams?.category as string) || '';
-  const searchsText = (searchParams?.query as string) ||" ";
   const comCategory = (searchParams?.category as string) || '';
 
 
@@ -36,14 +26,13 @@ export default async function Home({searchParams, donor}:HomeProps) {
   });
 
   const compaigns = await getAllCompaigns({
-    querys:searchsText,
-    comCategory,
-    pages,
+    query:'',
+    comCategory: '',
+    page:1,
     limit: 6,
   });
 
-  const { sessionClaims } = auth();
-  const userId = sessionClaims?.userId as string;
+ 
 
 
   return (
@@ -55,7 +44,11 @@ export default async function Home({searchParams, donor}:HomeProps) {
           <h1 className="h1-bold justify-start pr-4">Welcome to the Hope Foundation</h1>
           <p className="p-regular-20 md:p-regular-24">Our work aims to break the vicious cycle of poverty and social isolation and to restore hope for a better future.</p>
           
-          <DonaitonProcess donor={donor}/>
+          <Button size="lg" asChild className="button w-full sm:w-fit">
+            <Link href="/donate">
+            Donate Now
+            </Link>
+          </Button>
 
         </div>
 
