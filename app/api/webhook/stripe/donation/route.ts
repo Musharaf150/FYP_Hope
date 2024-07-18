@@ -1,9 +1,8 @@
 // Importing necessary modules
 import Stripe from 'stripe';
 import { NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/database';
-import Totaldonation from '@/lib/database/models/totaldonation.model';
 import { createTotalDonation } from '@/lib/actions/totaldonation.actions';
+import { handleError } from '@/lib/utils';
 
 // Initialize Stripe with your secret key
 const stripe = new Stripe(process.env.STRIPE_WEBHOOK_SECRET_DONATION!, {
@@ -19,8 +18,9 @@ export async function POST(request: Request) {
   const sig = request.headers.get('stripe-signature') as string;
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_DONATION!;
 
+  
   let event;
- 
+
   try {
     // Construct the Stripe event
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
@@ -30,42 +30,31 @@ export async function POST(request: Request) {
   }
 
   // Get the event type
+  const eventType = event.type;
 
   // Handle the 'checkout.session.completed' event
-  switch (event.type) {
-    case 'payment_intent.succeeded':
-      const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      const donorId = paymentIntent.metadata.donorId;
-      const amount = paymentIntent.amount_received;
+  if (eventType === 'checkout.session.completed') {
+    const { id, amount_total, metadata } = event.data.object;
 
-      const totaldonation = {
-        stripeId: paymentIntent.id,
-        donorId: donorId,
-        amount: amount/100,
-        createdAt: new Date()
-      
-      }
-      const newtotaldonation = await createTotalDonation(totaldonation)
-      return NextResponse.json({message: 'OK', totaldonation:newtotaldonation})
+    // Create an order object
+    const totaldonation = {
+      stripeId: id,
+      donorId: metadata?.donorId || '',
+      amount: amount_total ? (amount_total / 100) : 0,
+      createdAt: new Date(),
+    };
 
-      // await connectToDatabase();
-
-      // // Update the donation record in your database
-      // await Totaldonation.findOneAndUpdate(
-      //   { stripeId: paymentIntent.id },
-      //   {
-      //     donorId: donorId
-      //   },
-      //   { totalDonation: amount / 100 }, // Stripe amount is in cents
-      //   { new: true }
-      // );
-
-      console.log(`PaymentIntent for ${amount} was successful!`);
-      break;
-    default:
-      console.log(`Unhandled event type ${event.type}`);
+    try {
+      // Save the new order to your database
+      const newTotaldonation = await createTotalDonation(totaldonation);
+      console.log(newTotaldonation);
+      // Return a success response
+      return NextResponse.json({ message: 'OK', totaldonation: newTotaldonation });
+    } catch (error) {
+      // Return an error response if order creation fails
+      handleError(error)
+    }
   }
-
   // Return a success response for all other event types
   return new Response('', { status: 200 });
 }

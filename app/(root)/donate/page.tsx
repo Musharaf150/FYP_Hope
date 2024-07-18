@@ -5,11 +5,15 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-type props ={
+type DonorProps ={
     donor: ITotaldonation;
 }
 
-const Donate = ({donor}:props) => {
+const Donate = ({donor}:DonorProps) => {
+  
+
+
+
   return (
     <div>
       <section className=" bg-primary-50 h-screen bg-contain py-5 md:py-10">
