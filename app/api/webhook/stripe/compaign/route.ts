@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
   // Retrieve the Stripe signature from the headers
   const sig = request.headers.get('stripe-signature') as string;
-  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_COMPAIGN!;
 
   let event;
 
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
     try {
       // Save the new order to your database
-      const newComraised =await createComRaised(comraised)
+      const newComraised = await createComRaised(comraised)
       console.log(newComraised);
       // Return a success response
       return NextResponse.json({ message: 'OK', comraised: newComraised });
