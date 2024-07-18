@@ -1,15 +1,14 @@
 import DonationProcess from '@/components/shared/DonationProcess'
 import { Button } from '@/components/ui/button'
 import { ITotaldonation } from '@/lib/database/models/totaldonation.model'
+import { loadStripe } from '@stripe/stripe-js'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-type DonorProps ={
-    donor: ITotaldonation;
-}
+loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-const Donate = ({donor}:DonorProps) => {
+const Donate = () => {
   
 
 
@@ -23,7 +22,7 @@ const Donate = ({donor}:DonorProps) => {
           <h1 className="h1-bold justify-start pr-4">Donate for a Good Cause</h1>
           <p className="p-regular-20 md:p-regular-24">Our work aims to break the vicious cycle of poverty and social isolation and to restore hope for a better future.</p>
           
-          <DonationProcess donor={donor}/>
+          <Link href='https://buy.stripe.com/test_00g5mg9Qx3igfegbJ7'><Button variant='outline'>Donate Now</Button></Link>
 
         </div>
         <Image 

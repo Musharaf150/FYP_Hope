@@ -22,7 +22,7 @@ export const checkoutTotalDonation = async (totaldonation: CheckoutTotalDonation
     const paymentLink = await stripe.paymentLinks.create({
       line_items: [
         {
-            price: 'price_1Pdva0DhRKC72IWJlJo1Bh8U',
+            price: 'price_1Pe05ODhRKC72IWJKSQk0G0g',
             quantity: 1,
           },
       ],
