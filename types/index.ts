@@ -292,9 +292,9 @@ export type GetTotalDonationByUserParams = {
   }
   
   export type SearchParamProps = {
-    page(page: any): unknown
-    query: string
-    category: string
+    page?: unknown
+    query?: string
+    category?: string
     params: { id: string }
     searchParams: { [key: string]: string | string[] | undefined }
   }
