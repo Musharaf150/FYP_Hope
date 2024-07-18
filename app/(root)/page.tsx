@@ -9,9 +9,17 @@ import { SearchParamProps } from "@/types";
 import CategoryFilter from "@/components/shared/CategoryFilter";
 import { getAllCompaigns } from "@/lib/actions/compaign.actions";
 import CompaignCollection from "@/components/shared/CompaignCollection";
+import DonaitonProcess from "@/components/shared/DonationProcess";
+import { auth } from "@clerk/nextjs/server";
+import { ITotaldonation } from "@/lib/database/models/totaldonation.model";
 
 
-export default async function Home({searchParams}: SearchParamProps) {
+type HomeProps = {
+  donor: ITotaldonation
+  searchParams: SearchParamProps
+}
+
+export default async function Home({searchParams, donor}:HomeProps) {
   const page = Number(searchParams?.page) || 1;
   const searchText = (searchParams?.query as string) ||" ";
   const category = (searchParams?.category as string) || '';
@@ -32,7 +40,8 @@ export default async function Home({searchParams}: SearchParamProps) {
     limit: 6,
   });
 
-  console.log(compaigns)
+  const { sessionClaims } = auth();
+  const userId = sessionClaims?.userId as string;
 
 
   return (
@@ -44,11 +53,7 @@ export default async function Home({searchParams}: SearchParamProps) {
           <h1 className="h1-bold justify-start pr-4">Welcome to the Hope Foundation</h1>
           <p className="p-regular-20 md:p-regular-24">Our work aims to break the vicious cycle of poverty and social isolation and to restore hope for a better future.</p>
           
-          <Button size="lg" asChild className="button w-full sm:w-fit">
-            <Link href="/">
-            Donate Now
-            </Link>
-          </Button>
+          <DonaitonProcess donor={donor}/>
 
         </div>
 

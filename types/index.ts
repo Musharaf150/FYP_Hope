@@ -210,6 +210,10 @@ export type Compaign = {
 export type CreateComCategoryParams = {
   comCategoryName: string
 }
+export type GetByCompaignParams = {
+  compaignId: string
+  searchString: string
+}
 
 // ====== COMRAISED PARAMS
 export type CheckoutComRaisedParams = {
@@ -237,10 +241,6 @@ export type ComRaisedProps ={
   },
   donorId: string,
 }
-export type GetByCompaignParams = {
-  compaignId: string
-  searchString: string
-}
 
 export type GetComRaisedByUserParams = {
   userId: string | null
@@ -248,6 +248,36 @@ export type GetComRaisedByUserParams = {
   page: string | number | null
 }
 
+
+// ====== TOTALDONATION PARAMS
+export type CheckoutTotalDonationParams = {
+  donorId: string
+}
+
+export type CreateTotalDonationParams = {
+  stripeId: string
+  donorId: string
+  amount: string
+  createdAt: Date
+}
+
+export type TotalDonationProps ={
+  createdAt: Date,
+  stripeId: String,
+  amount: String,
+  donor: {
+    donorEmail: '$donor.email',
+    donorFirstname: '$donor.firstName',
+    donorId: '$donor.lastName',
+  },
+  donorId: string,
+}
+
+export type GetTotalDonationByUserParams = {
+  userId: string | null
+  limit?: number
+  page: string | number | null
+}
   
   // ====== URL QUERY PARAMS
   export type UrlQueryParams = {
@@ -262,6 +292,9 @@ export type GetComRaisedByUserParams = {
   }
   
   export type SearchParamProps = {
+    page(page: any): unknown
+    query: string
+    category: string
     params: { id: string }
     searchParams: { [key: string]: string | string[] | undefined }
   }
