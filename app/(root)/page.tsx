@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getAllEvents } from '@/lib/actions/event.actions';
 import Services from "@/components/shared/Services";
 import Search from "@/components/shared/Search";
-import { SearchParamProps } from "@/types";
+import { SearchParamsProps } from "@/types";
 import CategoryFilter from "@/components/shared/CategoryFilter";
 import { getAllCompaigns } from "@/lib/actions/compaign.actions";
 import CompaignCollection from "@/components/shared/CompaignCollection";
@@ -16,13 +16,15 @@ import { ITotaldonation } from "@/lib/database/models/totaldonation.model";
 
 type HomeProps = {
   donor: ITotaldonation
-  searchParams: SearchParamProps
+  searchParams: SearchParamsProps
 }
 
 export default async function Home({searchParams, donor}:HomeProps) {
   const page = Number(searchParams?.page) || 1;
+  const pages = Number(searchParams?.page) || 1;
   const searchText = (searchParams?.query as string) ||" ";
   const category = (searchParams?.category as string) || '';
+  const searchsText = (searchParams?.query as string) ||" ";
   const comCategory = (searchParams?.category as string) || '';
 
 
@@ -34,9 +36,9 @@ export default async function Home({searchParams, donor}:HomeProps) {
   });
 
   const compaigns = await getAllCompaigns({
-    query:'',
-    comCategory: '',
-    page:1,
+    querys:searchsText,
+    comCategory,
+    pages,
     limit: 6,
   });
 

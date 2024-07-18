@@ -5,13 +5,13 @@ import { SearchParamProps } from '@/types';
 import Image from 'next/image';
 import React from 'react'
 
-const CompaignDetails = async ({params:{ id }, searchParams}: SearchParamProps) => {
+const CompaignDetails = async ({params:{ id}, searchParams}: SearchParamProps) => {
   const compaign = await getCompaignById(id);
 
   const relatedCompaigns = await getRelatedCompaignByComCategory({
     comCategoryId: compaign.comCategory._id,
     compaignId: compaign._id,
-    page: searchParams.page as string,
+    page: searchParams?.page as string,
   })
  
 

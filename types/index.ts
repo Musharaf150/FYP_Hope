@@ -167,10 +167,10 @@ export type DeleteCompaignParams = {
 }
 
 export type GetAllCompaignsParams = {
-  query: string
+  querys: string
   comCategory: string
   limit: number
-  page: number
+  pages: number
 }
 
 export type GetCompaignsByUserParams = {
@@ -292,9 +292,6 @@ export type GetTotalDonationByUserParams = {
   }
   
   export type SearchParamProps = {
-    page?: unknown
-    query?: string
-    category?: string
     params: { id: string }
     searchParams: { [key: string]: string | string[] | undefined }
   }
@@ -303,4 +300,11 @@ export type GetTotalDonationByUserParams = {
     title: string
     icon: string
     bgColor: string
+  }
+  export type SearchParamsProps = {
+    category: string
+    query: string
+    page: any
+    params: { id: string }
+    searchParams: { [key: string]: string | string[] | undefined }
   }

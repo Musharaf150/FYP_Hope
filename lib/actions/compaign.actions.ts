@@ -29,7 +29,7 @@ export async function getCompaignById(compaignId: string) {
   }
 }
 
-export async function getAllCompaigns({ query, limit = 6, page, comCategory }: GetAllCompaignsParams) {
+export async function getAllCompaigns({ querys, limit = 6, pages, comCategory }: GetAllCompaignsParams) {
     try {
       await connectToDatabase()
   
