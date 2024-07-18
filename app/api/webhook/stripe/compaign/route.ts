@@ -1,12 +1,11 @@
 // Importing necessary modules
 import Stripe from 'stripe';
 import { NextResponse } from 'next/server';
-import { createOrder } from '@/lib/actions/order.actions';
 import { handleError } from '@/lib/utils';
 import { createComRaised } from '@/lib/actions/comraised.actions';
 
 // Initialize Stripe with your secret key
-const stripe = new Stripe(process.env.STRIPE_WEBHOOK_SECRET!, {
+const stripe = new Stripe(process.env.STRIPE_WEBHOOK_SECRET_COMPAIGN!, {
   apiVersion: '2024-06-20',
 });
 
@@ -33,29 +32,31 @@ export async function POST(request: Request) {
   const eventType = event.type;
 
   // Handle the 'checkout.session.completed' event
-  if (eventType === 'checkout.session.completed') {
+
+  if(eventType === 'checkout.session.completed'){
     const { id, amount_total, metadata } = event.data.object;
 
     // Create an order object
-    const order = {
+    const comraised = {
       stripeId: id,
-      eventId: metadata?.eventId || '',
-      buyerId: metadata?.buyerId || '',
-      totalAmount: amount_total ? (amount_total / 100).toString() : '0',
+      compaignId: metadata?.compaignId || '',
+      donorId: metadata?.donorId || '',
+      raisedAmount: amount_total ? (amount_total / 100).toString() : '0',
       createdAt: new Date(),
     };
 
     try {
       // Save the new order to your database
-      const newOrder = await createOrder(order);
-      console.log(newOrder);
+      const newComraised =await createComRaised(comraised)
+      console.log(newComraised);
       // Return a success response
-      return NextResponse.json({ message: 'OK', order: newOrder });
+      return NextResponse.json({ message: 'OK', comraised: newComraised });
     } catch (error) {
       // Return an error response if order creation fails
       handleError(error)
     }
   }
+ 
 
   // Return a success response for all other event types
   return new Response('', { status: 200 });
