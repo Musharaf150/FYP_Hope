@@ -22,7 +22,10 @@ const Card = ({ compaign}: CardProps) => {
     <div className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg md:min-h-[438px]">
           <div className="relative">
                           <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">URGENT</div>
-              <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">Zakat Eligible</div>
+                          {compaign.isZakatEligible && (
+
+<div className="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">Zakat Eligible</div>
+          )}
           </div>
      
       <Link 
@@ -61,7 +64,7 @@ const Card = ({ compaign}: CardProps) => {
                       <span className="text-gray-600">Required</span>
                   </div>
                   <div className="flex items-center justify-between text-sm mt-1">
-                      <span>Rs. 2,528,449</span>
+                      <span>Rs. 2,528</span>
                       <span className="text-gray-600">Raised</span>
                   </div>
 

@@ -70,7 +70,7 @@ const CompaignDetails = async ({params:{ id}, searchParams}: SearchParamProps) =
                       <span className="text-gray-600">Required</span>
                   </div>
                   <div className="flex items-center justify-between text-sm mt-1">
-                      <span>Rs. 2,528,449</span>
+                      <span>Rs. 2,528</span>
                       <span className="text-gray-600">Raised</span>
                   </div>
 

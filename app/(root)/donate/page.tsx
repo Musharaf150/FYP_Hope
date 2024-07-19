@@ -22,7 +22,9 @@ const Donate = () => {
           <h1 className="h1-bold justify-start pr-4">Donate for a Good Cause</h1>
           <p className="p-regular-20 md:p-regular-24">Our work aims to break the vicious cycle of poverty and social isolation and to restore hope for a better future.</p>
           
-          <Link href='https://buy.stripe.com/test_00g5mg9Qx3igfegbJ7'><Button variant='outline'>Donate Now</Button></Link>
+          <Link href='https://buy.stripe.com/test_00g5mg9Qx3igfegbJ7'>
+          <Button size="lg" asChild className="button w-full sm:w-fit">Donate Now</Button>
+          </Link>
 
         </div>
         <Image 

@@ -79,3 +79,22 @@ export async function deleteUser(clerkId: string) {
     handleError(error)
   }
 }
+
+export async function getAllUsers() {
+  try {
+    await connectToDatabase();
+
+    const users = await User.find(); // Fetch all users
+
+    return users.map(user => ({
+      clerkId: user.clerkId,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      photo: user.photo,
+    }));
+  } catch (error) {
+    console.error('Error in getAllUsers:', error);
+    throw new Error('Failed to fetch users');
+  }
+}
