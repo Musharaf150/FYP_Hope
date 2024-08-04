@@ -7,6 +7,7 @@ export type CardProps = {
     label: string;
     icon: LucideIcon;
     amount: string;
+    route:string;
 }
 
 export default function Card(props: CardProps){
@@ -14,7 +15,7 @@ export default function Card(props: CardProps){
     <CardContent>
         
         <section className='flex justify-between'>
-            <p>{props.label}</p>
+            <Link href={props.route}><p>{props.label}</p></Link>
             <props.icon className='h-4 w-4 text-gray-400' />
         </section>
         <section className='flex flex-col gap-1'>

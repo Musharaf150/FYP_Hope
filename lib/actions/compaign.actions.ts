@@ -6,6 +6,12 @@ import User from "../database/models/user.model";
 import ComCategory from "../database/models/comcategory.model";
 import { GetAllCompaignsParams, GetRelatedCompaignsByComCategoryParams} from "@/types";
 
+
+const getCategoryByName = async (name: string) => {
+  return ComCategory.findOne({ name: { $regex: name, $options: 'i' } })
+}
+
+
 const populateCompaign = (query: any) => {
   return query
     .populate({ path: 'organizer', model: User, select: '_id firstName lastName' })
@@ -33,20 +39,20 @@ export async function getAllCompaigns({ query, limit = 6, page, comCategory }: G
     try {
       await connectToDatabase()
   
-    //   const titleCondition = query ? { title: { $regex: query, $options: 'i' } } : {}
-    //   const categoryCondition = category ? await getCategoryByName(category) : null
-    //   const conditions = {
-    //     $and: [titleCondition, categoryCondition ? { category: categoryCondition._id } : {}],
-    //   }
-  
-    const conditions ={}
-    //   const skipAmount = (Number(page) - 1) * limit
-      const compaignsQuery = Compaign.find(conditions)
+      const titleCondition = query ? { title: { $regex: query, $options: 'i' } } : {}
+      const categoryCondition = comCategory ? await getCategoryByName(comCategory) : null
+      const conditions = {
+        $and: [titleCondition, categoryCondition ? { comCategory: categoryCondition._id } : {}],
+      }
+
+      const skipAmount = (Number(page) - 1) * limit
+      const campaignsQuery = Compaign.find(conditions)
         .sort({ createdAt: 'desc' })
-        .skip(0)
+        .skip(skipAmount)
         .limit(limit)
   
-      const compaigns = await populateCompaign(compaignsQuery)
+  
+      const compaigns = await populateCompaign(campaignsQuery)
       const compaignsCount = await Compaign.countDocuments(conditions)
   
       return {

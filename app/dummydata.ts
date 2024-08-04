@@ -5,6 +5,7 @@ export const data = [
       label: "Total Donations",
       amount: "$45,231",
       icon: DollarSign,
+      route: '/dashboard'
       
     },
     {

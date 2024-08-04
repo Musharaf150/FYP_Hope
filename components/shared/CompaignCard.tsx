@@ -4,8 +4,6 @@ import Link from 'next/link'
 import React from 'react'
 import { auth } from '@clerk/nextjs/server'
 import { ICompaign } from '@/lib/database/models/compaign.model'
-import { Progress } from '../ui/progress'
-import { Button } from '../ui/button'
 import CompaignDonateButton from './CompaignDonateButton'
 
 type CardProps = {
@@ -31,7 +29,7 @@ const Card = ({ compaign}: CardProps) => {
       <Link 
         href={`/compaigns/${compaign._id}`}
         style={{backgroundImage: `url(${compaign.imageUrl})`}}
-        className="flex-center flex-grow bg-gray-50 bg-cover bg-center text-grey-500 h-72"
+        className="flex-center flex-grow bg-gray-50 bg-cover bg-center text-grey-500 h-60"
       />
 
       
@@ -39,7 +37,8 @@ const Card = ({ compaign}: CardProps) => {
       <div
         className="flex min-h-[230px] flex-col gap-3 p-5 md:gap-4"
       > 
-      <div className="flex gap-2">
+     <div className='flex flex-row-reverse justify-between items-center'>
+     <div className="flex gap-2">
           <p className="p-semibold-14 w-min rounded-full bg-grey-500/10 px-4 py-1 text-grey-500 line-clamp-1">
             {compaign.comCategory.name}
           </p>
@@ -51,6 +50,7 @@ const Card = ({ compaign}: CardProps) => {
         </p>
     
         </div>
+     </div>
 
         
 
@@ -71,10 +71,10 @@ const Card = ({ compaign}: CardProps) => {
               </div>
 
         <div className=" w-full">
-          {/* <p className="p-medium-14 md:p-medium-16 text-grey-600">
-            {compaign.organizer.firstName} {compaign.organizer.lastName}
+          <p className="p-medium-14 md:p-medium-16 text-grey-600">
+            {compaign.description?.substring(0,90)}...
 
-          </p>  */}
+          </p> 
           <CompaignDonateButton compaign={compaign}/>
         </div>
       </div>

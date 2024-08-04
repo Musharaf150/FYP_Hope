@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { FormEvent, useEffect } from 'react'
 import { loadStripe } from '@stripe/stripe-js';
 
 
 import { Button } from '../ui/button'
 import { IEvent } from '@/lib/database/models/event.model'
 import { checkoutOrder } from '@/lib/actions/order.actions';
+import { createVolunteer } from '@/lib/actions/volunteer.actions';
 
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
@@ -38,12 +39,32 @@ const Checkout = ({event, userId}: {event: IEvent, userId: string}) => {
      
     }
 
+    const onVolunteered = async (e:FormEvent) =>{
+      e.preventDefault();
+
+      const volunter = {
+          eventTitle: event.title,
+          eventId: event._id,
+          volunteerId: userId
+      }
+
+      // await createVolunteer(volunter);
+   
+  }
+
   return (
+    <>
     <form action={onCheckout} method='post'>
-        <Button type='submit' role='link' size="lg" className='button sm:w-fit'>
+        <Button type='submit' role='link' size="lg" className='button sm:w-fit px-20'>
             {event.isFree ? "Get Ticket" : "Buy Ticket"}
         </Button>
     </form>
+    <form onSubmit={onVolunteered} method='post'>
+        <Button type='submit' role='link' size="lg" className='button sm:w-fit'>
+            Become a Volunteer
+        </Button>
+    </form>
+    </>
   )
 }
 

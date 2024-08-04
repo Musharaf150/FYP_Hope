@@ -15,14 +15,14 @@ export const checkoutComRaised = async (comraised: CheckoutComRaisedParams) => {
     custom_unit_amount: {
       enabled: true,
     },
-    product: 'prod_QUdPTjVzwxOUxF',
+    product: 'prod_Qb2yXUOuDL9PU1',
   });
 
   try {
     const paymentLink = await stripe.paymentLinks.create({
       line_items: [
         {
-            price: 'price_1Pdg96DhRKC72IWJNbgc3K31',
+            price: 'price_1PjqtmDhRKC72IWJ8SZy0wBt',
             quantity: 1,
           },
       ],
@@ -58,7 +58,7 @@ export const createComRaised = async (comraised: CreateComRaisedParams) => {
       donor: comraised.donorId,
     });
 
-    console.log( newComraised)
+    console.log(newComraised)
 
     return JSON.parse(JSON.stringify(newComraised));
     

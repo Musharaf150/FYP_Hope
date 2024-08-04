@@ -9,27 +9,29 @@ import { SearchParamProps } from "@/types";
 import CategoryFilter from "@/components/shared/CategoryFilter";
 import { getAllCompaigns } from "@/lib/actions/compaign.actions";
 import CompaignCollection from "@/components/shared/CompaignCollection";
+import ComCategoryFilter from "@/components/shared/ComCategoryFilter";
 
 
 export default async function Home({searchParams}: SearchParamProps) {
   const page = Number(searchParams?.page) || 1;
-  const searchText = (searchParams?.query as string) ||" ";
+  const eventsearchText = (searchParams?.query as string) ||" ";
   const category = (searchParams?.category as string) || '';
-  const comCategory = (searchParams?.category as string) || '';
+  const compaignsearchText = (searchParams?.query as string) ||" ";
+  const comCategory = (searchParams?.comCategory as string) || '';
 
 
   const events = await getAllEvents({
-    query:searchText,
+    query:eventsearchText,
     category,
     page,
     limit: 6
   });
 
   const compaigns = await getAllCompaigns({
-    query:'',
-    comCategory: '',
-    page:1,
-    limit: 6,
+    query:"",
+    comCategory,
+    page,
+    limit: 6
   });
 
  
@@ -97,13 +99,13 @@ export default async function Home({searchParams}: SearchParamProps) {
         <h2 className="h2-bold">Thousands of Compaigns</h2>
 
         <div className="flex w-full flex-col gap-5 md:flex-row">
-          <Search/>
-          <CategoryFilter/>
+          {/* <Search/> */}
+          <ComCategoryFilter/>
         </div>
         
         <CompaignCollection
           data={compaigns?.data}
-          emptyTitle="No Events Found"
+          emptyTitle="No Campaigns Found"
           emptyStateSubtext="Come back later"
           collectionType="All_Compaigns"
           limit={6}

@@ -1,13 +1,9 @@
 "use client"
 
 
-import { SignedIn, SignedOut, useUser } from '@clerk/nextjs'
+import { SignedIn, useUser } from '@clerk/nextjs'
 import React from 'react'
-import { Button } from '../ui/button'
-import Link from 'next/link'
-import Checkout from './Checkout'
 import { ICompaign } from '@/lib/database/models/compaign.model'
-import { Sign } from 'crypto'
 import DonateClick from './DonateClick'
 
 const CompaignDonationButton = ({compaign}:{ compaign: ICompaign}) => {
@@ -17,7 +13,7 @@ const CompaignDonationButton = ({compaign}:{ compaign: ICompaign}) => {
 
 
   return (
-    <div className='flex items-center gap-3'>
+    <div className='flex justify-center items-center mt-2'>
         {/* Cannot buy past events */}
         {
             hasEventFinished ? (

@@ -7,11 +7,10 @@ import { auth } from '@clerk/nextjs/server'
 
 type CardProps = {
   event: IEvent,
-  hasOrderLink?: boolean,
   hidePrice?: boolean
 }
 
-const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
+const Card = ({ event, hidePrice }: CardProps) => {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
 
@@ -48,16 +47,10 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
         </Link>
 
         <div className="flex-between w-full">
-          {/* <p className="p-medium-14 md:p-medium-16 text-grey-600">
-            {event.organizer.firstName} {event.organizer.lastName}
-          </p> */}
+          <p className="p-medium-14 md:p-medium-16 text-grey-600">
+            {event.description?.substring(0,90)}...
+          </p>
 
-          {hasOrderLink && (
-            <Link href={`/orders?eventId=${event._id}`} className="flex gap-2">
-              <p className="text-primary-500">Order Details</p>
-              <Image src="/assets/icons/arrow.svg" alt="search" width={10} height={10} />
-            </Link>
-          )}
         </div>
       </div>
     </div>

@@ -278,6 +278,18 @@ export type GetTotalDonationByUserParams = {
   limit?: number
   page: string | number | null
 }
+
+//VOLUNTEER PARAMS
+export type CreateVolunteerParams = {
+  eventId: string
+  volunteerId: string
+  createdAt?: Date
+}
+
+export type GetVolunteerByEventParams = {
+  eventId: string
+  searchString: string
+}
   
   // ====== URL QUERY PARAMS
   export type UrlQueryParams = {

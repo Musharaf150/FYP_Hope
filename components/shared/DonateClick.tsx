@@ -39,7 +39,7 @@ const DonateClick = ({compaign, userId}: {compaign: ICompaign, userId: string}) 
 
   return (
     <form action={onCheckout} method='post'>
-        <Button type='submit' role='link' size="lg" className='button sm:w-fit'>
+        <Button type='submit' role='link' size='sm' className='w-full px-28'>
             Donate Now
         </Button>
     </form>

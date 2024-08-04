@@ -16,6 +16,7 @@ const Dashboard = () => {
         label={d.label}
         amount={d.amount}
         icon={d.icon}
+        route={d.route}
         />
         )}
         

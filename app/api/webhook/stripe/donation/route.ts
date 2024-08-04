@@ -33,28 +33,28 @@ export async function POST(request: Request) {
   const eventType = event.type;
 
   // Handle the 'checkout.session.completed' event
-  if (eventType === 'checkout.session.completed') {
-    const { id, amount_total, metadata } = event.data.object;
+  // if (eventType === 'checkout.session.completed') {
+  //   const { id, amount_total, metadata } = event.data.object;
 
-    // Create an order object
-    const totaldonation = {
-      stripeId: id,
-      donorId: metadata?.donorId || '',
-      amount: amount_total ? (amount_total / 100) : 0,
-      createdAt: new Date(),
-    };
+  //   // Create an order object
+  //   const totaldonation = {
+  //     stripeId: id,
+  //     donorId: metadata?.donorId || '',
+  //     amount: amount_total ? (amount_total / 100) : 0,
+  //     createdAt: new Date(),
+  //   };
 
-    try {
-      // Save the new order to your database
-      const newTotaldonation = await createTotalDonation(totaldonation);
-      console.log(newTotaldonation);
-      // Return a success response
-      return NextResponse.json({ message: 'OK', totaldonation: newTotaldonation });
-    } catch (error) {
-      // Return an error response if order creation fails
-      handleError(error)
-    }
-  }
+  //   try {
+  //     // Save the new order to your database
+  //     const newTotaldonation = await createTotalDonation(totaldonation);
+  //     console.log(newTotaldonation);
+  //     // // Return a success response
+  //     return NextResponse.json({ message: 'OK', totaldonation: newTotaldonation });
+  //   } catch (error) {
+  //     // Return an error response if order creation fails
+  //     handleError(error)
+  //   }
+  // }
   // Return a success response for all other event types
   return new Response('', { status: 200 });
 }
