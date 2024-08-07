@@ -27,6 +27,7 @@ export const checkoutComRaised = async (comraised: CheckoutComRaisedParams) => {
           },
       ],
       metadata: {
+        type: "campaign",
         compaignId: comraised.compaignId,
         donorId: comraised.donorId,
       },

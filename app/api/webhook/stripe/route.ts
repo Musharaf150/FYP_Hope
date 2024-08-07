@@ -44,6 +44,8 @@ export async function POST(request: Request) {
       createdAt: new Date(),
     };
 
+    console.log("order",order)
+
     try {
       // Save the new order to your database
       const newOrder = await createOrder(order);

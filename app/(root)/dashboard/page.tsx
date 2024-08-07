@@ -5,7 +5,7 @@ import CurrentMonthDonation from '@/components/shared/CurrentMonthDonation'
 import DashboardSummary from '@/components/shared/DashboardSummary'
 import React from 'react'
 
-const Dashboard = (userId: string) => {
+const Dashboard = () => {
   return (
     <div className='wrapper flex flex-col gap-5 w-full'>
         <h2 className='h2-bold'>Dashboard</h2>

@@ -30,6 +30,7 @@ export const checkoutTotalDonation = async (totaldonation: CheckoutTotalDonation
           },
       ],
       metadata: {
+        type: "Donation",
         donorId: totaldonation.donorId,
       },
       after_completion: {

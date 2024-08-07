@@ -16,9 +16,10 @@ export async function POST(request: Request) {
 
   // Retrieve the Stripe signature from the headers
   const sig = request.headers.get('stripe-signature') as string;
-  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_COMPAIGN!;
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
   let event;
+  console.log(endpointSecret)
 
   try {
     // Construct the Stripe event
@@ -33,10 +34,12 @@ export async function POST(request: Request) {
 
   // Handle the 'checkout.session.completed' event
 
-  if(eventType === 'checkout.session.completed'){
+  if(eventType === 'checkout.session.completed')
+    {
     const { id, amount_total, metadata } = event.data.object;
 
-    // Create an order object
+    if(metadata?.type === "campaign"){
+        // Create an order object
     const comraised = {
       stripeId: id,
       compaignId: metadata?.compaignId || '',
@@ -44,6 +47,8 @@ export async function POST(request: Request) {
       raisedAmount: amount_total ? (amount_total / 100).toString() : '0',
       createdAt: new Date(),
     };
+
+    console.log("campaign",comraised)
 
     try {
       // Save the new order to your database
@@ -61,3 +66,7 @@ export async function POST(request: Request) {
   // Return a success response for all other event types
   return new Response('', { status: 200 });
 }
+    
+}
+
+
