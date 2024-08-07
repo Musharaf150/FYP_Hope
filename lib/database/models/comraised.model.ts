@@ -51,5 +51,6 @@ const ComRaisedSchema = new Schema({
 });
 
 const ComRaised = models.ComRaised || model('ComRaised', ComRaisedSchema);
+ console.log(models)
 
 export default ComRaised;

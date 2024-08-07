@@ -1,5 +1,4 @@
 import { Document, model, models, Schema } from "mongoose";
-import { connectToDatabase } from "..";
 
 export interface IVolunteer extends Document{
     _id: string;
@@ -8,7 +7,7 @@ export interface IVolunteer extends Document{
         _id: string;
         title: string;
       }
-      volunteer: {
+      participant: {
         _id: string
         email:string
         firstName: string
@@ -21,7 +20,7 @@ export type IVolunteerItem = {
     createdAt: Date
     eventTitle: string
     eventId: string
-    volunteer: {
+    participant: {
       _id: string
       email: string
       firstName: string
@@ -38,13 +37,14 @@ const VolunteerSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Event',
       },
-      volunteer: {
+      participant: {
         type: Schema.Types.ObjectId,
         ref: 'User',
       },
     
 })
 
-const Volunteer = models.Volunteer || model('Volunteer', VolunteerSchema);
+
+const Volunteer = models.Volunteer  || model('Volunteer', VolunteerSchema)
 
 export default Volunteer;

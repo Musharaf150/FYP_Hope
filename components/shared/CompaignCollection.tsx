@@ -32,8 +32,6 @@ const CompaignsCollection = ({
       <div className="flex flex-col items-center gap-10 px-5 sm:px-8 py-7 lg:py-12">
         <ul className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:gap-10">
           {data.map((compaign) => {
-            // const hasOrderLink = collectionType === 'Compaign_Organized';
-            // const hidePrice = collectionType === 'My_Compaigns';
 
             return (
               <li key={compaign._id} className="flex justify-center">

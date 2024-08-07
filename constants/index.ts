@@ -9,15 +9,15 @@ export const headerLinks = [
     },
     {
       label: 'Campaigns',
-      route: '/#campaigns',
+      route: '/#compaigns',
     },
     {
       label: 'About',
-      route: '/about',
+      route: '/aboutus',
     },
     {
       label: 'Contact Us',
-      route: '/contact',
+      route: '/contactus',
     },
   ]
   

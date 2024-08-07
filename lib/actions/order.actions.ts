@@ -9,6 +9,7 @@ import Order from '../database/models/order.model';
 import Event from '../database/models/event.model';
 import {ObjectId} from 'mongodb';
 import User from '../database/models/user.model';
+import { Anybody } from 'next/font/google';
 
 export const checkoutOrder = async (order: CheckoutOrderParams) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -148,8 +149,12 @@ export async function getOrdersByUser({ userId, limit = 3, page }: GetOrdersByUs
       })
 
     const ordersCount = await Order.distinct('event._id').countDocuments(conditions)
+   
 
-    return { data: JSON.parse(JSON.stringify(orders)), totalPages: Math.ceil(ordersCount / limit) }
+    return { data: JSON.parse(JSON.stringify(orders)),
+       totalPages: Math.ceil(ordersCount / limit), 
+       ordersCount}
+
   } catch (error) {
     handleError(error)
   }

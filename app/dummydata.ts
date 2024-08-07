@@ -1,26 +1,5 @@
-import { CalendarDays, Caravan, DollarSign} from "lucide-react";
 
-export const data = [
-    {
-      label: "Total Donations",
-      amount: "$45,231",
-      icon: DollarSign,
-      route: '/dashboard'
-      
-    },
-    {
-        label: "Participated Events",
-        amount: "3",
-        icon: CalendarDays,
-        route: '/dashboard/mytickets'
-    },
-    {
-        label: "Donated Campaigns",
-        amount: "5",
-        icon: Caravan,
-        route: '/dashboard/mytickets'
-    },
-];
+
 export const brdata= [
     {   month: "Jan",
         donation: Math.floor(Math.random() * 5000) +1000

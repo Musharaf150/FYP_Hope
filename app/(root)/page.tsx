@@ -80,7 +80,7 @@ export default async function Home({searchParams}: SearchParamProps) {
           emptyStateSubtext="Come back later"
           collectionType="All_Events"
           limit={6}
-          page={2}
+          page={page}
           totalPages={events?.totalPages}
         />
 
@@ -109,7 +109,7 @@ export default async function Home({searchParams}: SearchParamProps) {
           emptyStateSubtext="Come back later"
           collectionType="All_Compaigns"
           limit={6}
-          page={2}
+          page={page}
           totalPages={compaigns?.totalPages}
         />
 

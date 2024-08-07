@@ -1,5 +1,7 @@
-import DonationProcess from '@/components/shared/DonationProcess'
+"use client"
+
 import { Button } from '@/components/ui/button'
+import { checkoutTotalDonation } from '@/lib/actions/totaldonation.actions'
 import { ITotaldonation } from '@/lib/database/models/totaldonation.model'
 import { loadStripe } from '@stripe/stripe-js'
 import Image from 'next/image'
@@ -8,8 +10,18 @@ import React from 'react'
 
 loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-const Donate = () => {
+const Donate = ({donations, userId}: {donations: ITotaldonation, userId: string}) => {
   
+  const onCheckout = async () =>{
+    const totalDonations = {
+        createdAt: donations.createdAt,
+        amount: donations.amount,
+        donorId: userId
+    }
+
+    await checkoutTotalDonation(totalDonations);
+ 
+}
 
 
 
@@ -21,11 +33,10 @@ const Donate = () => {
         <div className=" flex flex-col justify-center gap-8">
           <h1 className="h1-bold justify-start pr-4">Donate for a Good Cause</h1>
           <p className="p-regular-20 md:p-regular-24">Our work aims to break the vicious cycle of poverty and social isolation and to restore hope for a better future.</p>
-          <Link href='https://buy.stripe.com/test_00g5mg9Qx3igfegbJ7'>
+          <Link href='https://buy.stripe.com/test_14kdSMd2Jg522ru7t9'>
           <Button size='lg' className="">Donate Now</Button>
-          </Link>
+          </Link>          
           
-
         </div>
         <Image 
         src="/assets/images/file.png"

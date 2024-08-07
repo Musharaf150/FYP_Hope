@@ -1,6 +1,7 @@
-import { LucideIcon } from 'lucide-react';
+import { CalendarDays, Caravan, DollarSign, LucideIcon } from 'lucide-react';
 import { CardContent } from './CardContent';
 import Link from 'next/link';
+
 
 
 export type CardProps = {
@@ -10,7 +11,9 @@ export type CardProps = {
     route:string;
 }
 
+
 export default function Card(props: CardProps){
+
   return (
     <CardContent>
         

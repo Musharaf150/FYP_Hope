@@ -1,35 +1,25 @@
-import { data } from '@/app/dummydata'
+
 import BarCharts from '@/components/shared/BarCharts'
-import Card from '@/components/shared/Card'
 import { CardContent } from '@/components/shared/CardContent'
+import CurrentMonthDonation from '@/components/shared/CurrentMonthDonation'
+import DashboardSummary from '@/components/shared/DashboardSummary'
 import React from 'react'
 
-const Dashboard = () => {
+const Dashboard = (userId: string) => {
   return (
     <div className='wrapper flex flex-col gap-5 w-full'>
         <h2 className='h2-bold'>Dashboard</h2>
-      <section className='grid w-full grid-cols-1 gap-4 gap-x-4 transition-all
-      sm:grid-cols-2 xl:grid-cols-4'>
-        {data.map((d, i)=>
-        <Card 
-        key={i}
-        label={d.label}
-        amount={d.amount}
-        icon={d.icon}
-        route={d.route}
-        />
-        )}
+       <DashboardSummary />
         
-      </section>
       <section className='grid grid-cols-1 gap-4 transition-all lg:grid-cols-2'>
         <CardContent>
             <p className='p-4 font-semibold'>Overview</p>
             <BarCharts/>
         </CardContent>
         <CardContent>
-            <section>
+            <section className='rounded-lg'>
                 <p className='font-semibold'>Recent Activities</p>
-                <p className='text-sm text-gray-400'>You Donated {data[0].amount} this month.</p>
+                <CurrentMonthDonation/>
             </section>
         </CardContent>
       </section>

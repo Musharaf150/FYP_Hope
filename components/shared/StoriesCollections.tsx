@@ -1,24 +1,24 @@
-import { IEvent } from '@/lib/database/models/event.model'
 import React from 'react'
-import EventCard from "./EventCard"
-import Pagination from './Pagination'
+import { IStory } from '@/lib/database/models/successstory.model'
+import StoryCard from './StoryCard'
+
 
 
 
 
 type CollectionProps = {
-    data: IEvent[],
+    data: IStory[],
     emptyTitle: string,
     emptyStateSubtext: string,
     limit: number,
     page: number | string,
     totalPages?: number,
     urlParamName?: string,
-    collectionType?: 'Events_Organized' | 'My_Tickets' | 'All_Events'
+    collectionType?: 'Story_Organized' | 'My_Stories' | 'All_Stories'
   }
   
 
-const Collection = ({
+const StoryCollection = ({
     data,
     emptyTitle,
     emptyStateSubtext,
@@ -27,28 +27,24 @@ const Collection = ({
     collectionType,
     urlParamName,
   }: CollectionProps) => {
-
-   
   return (
     <>
     {data.length > 0 ? (
       <div className="flex flex-col items-center gap-10 px-5 sm:px-8 py-7 lg:py-12">
         <ul className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:gap-10">
-          {data.map((event) => {
-            const hidePrice = collectionType === 'My_Tickets';
+          {data.map((story) => {
 
             return (
-              
-              <li key={event._id} className="flex justify-center">
-                <EventCard event={event} hidePrice={hidePrice} />
+              <li key={story._id} className="flex justify-center">
+                <StoryCard story={story}/>
               </li>
             )
           })}
         </ul>
 
-        {totalPages > 1 && (
+        {/* {totalPages > 1 && (
           <Pagination urlParamName={urlParamName} page={page} totalPages={totalPages} />
-        )}
+        )} */}
       </div>
     ): (
       <div className="flex-center wrapper min-h-[200px] w-full flex-col gap-3 rounded-[14px] bg-grey-50 py-28 text-center">
@@ -60,4 +56,4 @@ const Collection = ({
   )
 }
 
-export default Collection
+export default StoryCollection

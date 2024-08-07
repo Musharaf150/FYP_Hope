@@ -27,10 +27,11 @@ const NavItems = () => {
         );
       })}
     </ul>
-        <div className="xl:hidden md:hidden"><SignedIn>
-            <Link href="/dashboard" className="p-medium-16 whitespace-nowrap">Dashboard</Link>
-          </SignedIn></div> 
-    </div>
+        <div className="xl:hidden md:hidden">
+          <SignedIn>
+          <Link href="/dashboard" className="p-medium-16 whitespace-nowrap">Dashboard</Link>
+        </SignedIn></div>
+      </div>
     </>
   );
 };

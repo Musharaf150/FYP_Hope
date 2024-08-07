@@ -126,7 +126,7 @@ export type CreateUserParams = {
   export type GetOrdersByUserParams = {
     userId: string | null
     limit?: number
-    page: string | number | null
+    page?: string | number | null
   }
 
   // ====== COMPAIGN PARAMS
@@ -251,7 +251,7 @@ export type GetComRaisedByUserParams = {
 
 // ====== TOTALDONATION PARAMS
 export type CheckoutTotalDonationParams = {
-  donorId: string
+  donorId: string | null
 }
 
 export type CreateTotalDonationParams = {
@@ -273,16 +273,11 @@ export type TotalDonationProps ={
   donorId: string,
 }
 
-export type GetTotalDonationByUserParams = {
-  userId: string | null
-  limit?: number
-  page: string | number | null
-}
 
 //VOLUNTEER PARAMS
 export type CreateVolunteerParams = {
   eventId: string
-  volunteerId: string
+  participantId: string
   createdAt?: Date
 }
 
@@ -290,7 +285,21 @@ export type GetVolunteerByEventParams = {
   eventId: string
   searchString: string
 }
-  
+
+export type GetVolunteersByUserParams = {
+  userId: string | null
+  limit?: number
+  page: string | number | null
+}
+
+//GEt Stories
+export type GetAllStoriesParams = {
+  query: string
+  comCategory: string
+  limit: number
+  page: number
+}
+
   // ====== URL QUERY PARAMS
   export type UrlQueryParams = {
     params: string
