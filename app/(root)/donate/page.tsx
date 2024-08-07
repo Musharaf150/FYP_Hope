@@ -1,8 +1,4 @@
-"use client"
-
 import { Button } from '@/components/ui/button'
-import { checkoutTotalDonation } from '@/lib/actions/totaldonation.actions'
-import { ITotaldonation } from '@/lib/database/models/totaldonation.model'
 import { loadStripe } from '@stripe/stripe-js'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,18 +6,8 @@ import React from 'react'
 
 loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-const Donate = ({donations, userId}: {donations: ITotaldonation, userId: string}) => {
+const Donate = () => {
   
-  const onCheckout = async () =>{
-    const totalDonations = {
-        createdAt: donations.createdAt,
-        amount: donations.amount,
-        donorId: userId
-    }
-
-    await checkoutTotalDonation(totalDonations);
- 
-}
 
 
 
@@ -35,8 +21,9 @@ const Donate = ({donations, userId}: {donations: ITotaldonation, userId: string}
           <p className="p-regular-20 md:p-regular-24">Our work aims to break the vicious cycle of poverty and social isolation and to restore hope for a better future.</p>
           <Link href='https://buy.stripe.com/test_14kdSMd2Jg522ru7t9'>
           <Button size='lg' className="">Donate Now</Button>
-          </Link>          
+          </Link>
           
+
         </div>
         <Image 
         src="/assets/images/file.png"
