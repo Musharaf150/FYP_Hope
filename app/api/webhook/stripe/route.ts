@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       const { id, amount_total, metadata } = event.data.object as any;
 
       // Check for missing metadata
-      if (!metadata || !metadata.type || !metadata.compaignId || !metadata.donorId) {
+      if (!metadata || !metadata.type) {
         console.error('Missing metadata or required fields:', metadata);
         return NextResponse.json({ message: 'Missing metadata or required fields' }, { status: 400 });
       }
@@ -39,6 +39,10 @@ export async function POST(request: Request) {
       const { type } = metadata;
 
       if (type === "campaign") {
+        if (!metadata.compaignId || !metadata.donorId) {
+          console.error('Missing metadata or required fields:', metadata);
+          return NextResponse.json({ message: 'Missing metadata or required fields' }, { status: 400 });
+        }
         const comraised = {
           stripeId: id,
           compaignId: metadata.compaignId || '',
@@ -70,25 +74,28 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: 'OK', order: newOrder });
       }
 
-      if(type === "donation"){
-        // Create an order object
-    const totaldonation = {
-      stripeId: id,
-      donorId: metadata?.donorId || '',
-      amount: amount_total ? (amount_total / 100) : 0,
-      createdAt: new Date(),
-    };
+      if (type === "donation") {
+        if (!metadata.donorId) {
+          console.error('Missing metadata or required fields:', metadata);
+          return NextResponse.json({ message: 'Missing metadata or required fields' }, { status: 400 });
+        }
+        const totaldonation = {
+          stripeId: id,
+          donorId: metadata?.donorId || '',
+          amount: amount_total ? (amount_total / 100) : 0,
+          createdAt: new Date(),
+        };
 
-    try {
-      // Save the new order to your database
-      const newTotaldonation = await createTotalDonation(totaldonation);
-      console.log(newTotaldonation);
-      // // Return a success response
-      return NextResponse.json({ message: 'OK', totaldonation: newTotaldonation });
-    } catch (error) {
-      // Return an error response if order creation fails
-      handleError(error)
-    }
+        try {
+          // Save the new order to your database
+          const newTotaldonation = await createTotalDonation(totaldonation);
+          console.log(newTotaldonation);
+          // // Return a success response
+          return NextResponse.json({ message: 'OK', totaldonation: newTotaldonation });
+        } catch (error) {
+          // Return an error response if order creation fails
+          handleError(error)
+        }
       }
     }
 
