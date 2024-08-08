@@ -4,7 +4,7 @@ export interface IComRaised extends Document {
   createdAt: Date;
   stripeId: string;
   raisedAmount: string;
-  campaign: {
+  compaign: {
     _id: string;
     title: string;
   };
@@ -19,8 +19,8 @@ export type IComRaisedItem = {
   _id: string;
   raisedAmount: string;
   createdAt: Date;
-  campaignTitle: string;
-  campaignId: string;
+  compaignTitle: string;
+  compaignId: string;
   donor: string;
 };
 
@@ -38,7 +38,7 @@ const ComRaisedSchema = new Schema({
     type: String,
     required: true,
   },
-  campaign: {
+  compaign: {
     type: Schema.Types.ObjectId,
     ref: 'Compaign',
     required: true,
@@ -51,6 +51,5 @@ const ComRaisedSchema = new Schema({
 });
 
 const ComRaised = models.ComRaised || model('ComRaised', ComRaisedSchema);
- console.log(models)
 
 export default ComRaised;

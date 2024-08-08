@@ -1,63 +1,102 @@
-// Importing necessary modules
 import Stripe from 'stripe';
 import { NextResponse } from 'next/server';
 import { createOrder } from '@/lib/actions/order.actions';
 import { handleError } from '@/lib/utils';
+import { createComRaised } from '@/lib/actions/comraised.actions';
+import { createTotalDonation } from '@/lib/actions/totaldonation.actions';
 
-// Initialize Stripe with your secret key
-const stripe = new Stripe(process.env.STRIPE_WEBHOOK_SECRET!, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
 
-// Define the handler for POST requests
 export async function POST(request: Request) {
-  // Read the request body
   const body = await request.text();
-
-  // Retrieve the Stripe signature from the headers
   const sig = request.headers.get('stripe-signature') as string;
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
   let event;
 
   try {
-    // Construct the Stripe event
+    // Construct the event from the request body and signature
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
   } catch (err) {
-    // Return an error response if the webhook verification fails
+    console.error('Error verifying webhook signature:', err);
     return NextResponse.json({ message: 'Webhook error', error: err }, { status: 400 });
   }
 
-  // Get the event type
   const eventType = event.type;
 
-  // Handle the 'checkout.session.completed' event
-  if (eventType === 'checkout.session.completed') {
-    const { id, amount_total, metadata } = event.data.object;
+  try {
+    if (eventType === 'checkout.session.completed') {
+      const { id, amount_total, metadata } = event.data.object as any;
 
-    // Create an order object
-    const order = {
+      // Check for missing metadata
+      if (!metadata || !metadata.type || !metadata.compaignId || !metadata.donorId) {
+        console.error('Missing metadata or required fields:', metadata);
+        return NextResponse.json({ message: 'Missing metadata or required fields' }, { status: 400 });
+      }
+
+      const { type } = metadata;
+
+      if (type === "campaign") {
+        const comraised = {
+          stripeId: id,
+          compaignId: metadata.compaignId || '',
+          donorId: metadata.donorId || '',
+          raisedAmount: amount_total ? (amount_total / 100).toString() : '0',
+          createdAt: new Date(),
+        };
+
+        console.log("Campaign data:", comraised);
+
+        const newComraised = await createComRaised(comraised);
+        console.log("New Comraised record:", newComraised);
+        return NextResponse.json({ message: 'OK', comraised: newComraised });
+      }
+
+      if (type === "event") {
+        const order = {
+          stripeId: id,
+          eventId: metadata.eventId || '',
+          buyerId: metadata.buyerId || '',
+          totalAmount: amount_total ? (amount_total / 100).toString() : '0',
+          createdAt: new Date(),
+        };
+
+        console.log("Order data:", order);
+
+        const newOrder = await createOrder(order);
+        console.log("New Order record:", newOrder);
+        return NextResponse.json({ message: 'OK', order: newOrder });
+      }
+
+      if(type === "donation"){
+        // Create an order object
+    const totaldonation = {
       stripeId: id,
-      eventId: metadata?.eventId || '',
-      buyerId: metadata?.buyerId || '',
-      totalAmount: amount_total ? (amount_total / 100).toString() : '0',
+      donorId: metadata?.donorId || '',
+      amount: amount_total ? (amount_total / 100) : 0,
       createdAt: new Date(),
     };
 
-    console.log("order",order)
-
     try {
       // Save the new order to your database
-      const newOrder = await createOrder(order);
-      console.log(newOrder);
-      // Return a success response
-      return NextResponse.json({ message: 'OK', order: newOrder });
+      const newTotaldonation = await createTotalDonation(totaldonation);
+      console.log(newTotaldonation);
+      // // Return a success response
+      return NextResponse.json({ message: 'OK', totaldonation: newTotaldonation });
     } catch (error) {
       // Return an error response if order creation fails
       handleError(error)
     }
-  }
+      }
+    }
 
-  // Return a success response for all other event types
-  return new Response('', { status: 200 });
+    // Respond to other events or ignore
+    return new Response('', { status: 200 });
+
+  } catch (error) {
+    console.error('Error processing event:', error);
+    return NextResponse.json({ message: 'Internal Server Error', error }, { status: 500 });
+  }
 }

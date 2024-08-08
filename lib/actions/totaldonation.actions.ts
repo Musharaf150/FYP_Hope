@@ -30,7 +30,7 @@ export const checkoutTotalDonation = async (totaldonation: CheckoutTotalDonation
           },
       ],
       metadata: {
-        type: "Donation",
+        type: "donation",
         donorId: totaldonation.donorId,
       },
       after_completion: {
@@ -63,7 +63,9 @@ export const createTotalDonation= async (totaldonation: CreateTotalDonationParam
     return JSON.parse(JSON.stringify(newtotaldonation));
     
   } catch (error) {
+    console.error('Error creating total donation record:', error);
     handleError(error);
+    throw error; 
   }
 }
 

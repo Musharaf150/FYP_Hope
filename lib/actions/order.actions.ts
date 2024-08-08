@@ -31,6 +31,7 @@ export const checkoutOrder = async (order: CheckoutOrderParams) => {
         },
       ],
       metadata: {
+        type: "event",
         eventId: order.eventId,
         buyerId: order.buyerId,
       },
