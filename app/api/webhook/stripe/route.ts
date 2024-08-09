@@ -39,13 +39,19 @@ export async function POST(request: Request) {
       const { type } = metadata;
 
       if (type === "campaign") {
+<<<<<<< HEAD
         
+=======
+>>>>>>> a081fdd55f02bbc777bbc4c331824e05043e4c7c
         if (!metadata.compaignId || !metadata.donorId) {
           console.error('Missing metadata or required fields:', metadata);
           return NextResponse.json({ message: 'Missing metadata or required fields' }, { status: 400 });
         }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> a081fdd55f02bbc777bbc4c331824e05043e4c7c
         const comraised = {
           stripeId: id,
           compaignId: metadata.compaignId || '',
