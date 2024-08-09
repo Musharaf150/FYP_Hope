@@ -1,11 +1,15 @@
 "use server"
 
 import Stripe from 'stripe';
-import { CheckoutComRaisedParams, CreateComRaisedParams } from "@/types";
+import { CheckoutComRaisedParams, CreateComRaisedParams, GetComRaisedByUserParams, GetDonorsByUserParams } from "@/types";
 import { redirect } from 'next/navigation';
 import { handleError } from '../utils';
 import { connectToDatabase } from '../database';
 import ComRaised from '../database/models/comraised.model';
+import Compaign from '../database/models/compaign.model';
+import User from '../database/models/user.model';
+import {ObjectId} from 'mongodb';
+
 
 export const checkoutComRaised = async (comraised: CheckoutComRaisedParams) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -69,22 +73,157 @@ export const createComRaised = async (comraised: CreateComRaisedParams) => {
     throw error; // Ensure the error is propagated for further handling
   }
 }
-// export const createComRaised = async (comraised: CreateComRaisedParams) => {
-//   try {
-//     await connectToDatabase();
 
-//     const newComraised = await ComRaised.create({
-//       ...comraised,
-//       compaign: comraised.compaignId,
-//       donor: comraised.donorId,
-//     });
 
-//     console.log(newComraised);
+// GET COMRAISED BY USER
+export async function getRaisedByUser({ userId, limit = 3, page }: GetComRaisedByUserParams) {
+  try {
+    await connectToDatabase()
 
-//     return JSON.parse(JSON.stringify(newComraised));
-//   } catch (error) {
-//     console.error('Error creating comraised record:', error);
-//     handleError(error);
-//     throw error; // Ensure the error is thrown to handle it in the webhook
-//   }
-// }
+    const skipAmount = (Number(page) - 1) * limit
+    const conditions = { donor: userId }
+
+    const comraised = await ComRaised.distinct('compaign._id')
+      .find(conditions)
+      .sort({ createdAt: 'desc' })
+      .skip(skipAmount)
+      .limit(limit)
+      .populate({
+        path: 'compaign',
+        model: Compaign,
+        populate: {
+          path: 'organizer',
+          model: User,
+          select: '_id firstName lastName',
+        },
+      })
+
+    const raisedCount = await ComRaised.distinct('compaign._id').countDocuments(conditions)
+   
+   
+
+    return { data: JSON.parse(JSON.stringify(comraised)),
+       totalPages: Math.ceil(raisedCount/ limit), 
+       raisedCount}
+
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+//GET DONORS BY users
+export async function getDonorsByUser({ donorId, searchString = '' }: GetDonorsByUserParams) {
+  try {
+    await connectToDatabase();
+
+    if (!donorId) throw new Error('Donor ID is required');
+    const donorObjectId = new ObjectId(donorId);
+
+    const comraised = await ComRaised.aggregate([
+      {
+        $lookup: {
+          from: 'compaigns',
+          localField: 'compaign',
+          foreignField: '_id',
+          as: 'compaign',
+        },
+      },
+      {
+        $unwind: '$compaign',
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'donor',
+          foreignField: '_id',
+          as: 'donor',
+        },
+      },
+      {
+        $unwind: '$donor',
+      },
+      {
+        $match: {
+          'donor._id': donorObjectId,
+          'donor.firstName': { $regex: new RegExp(searchString, 'i') }
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          raisedAmount: 1,
+          createdAt: 1,
+          compaignTitle: '$compaign.title',
+          compaignId: '$compaign._id',
+          donor: {
+            name: { $concat: ['$donor.firstName', ' ', '$donor.lastName'] },
+            email: '$donor.email',
+          },
+        },
+      },
+    ]);
+
+    return JSON.parse(JSON.stringify(comraised));
+  } catch (error) {
+    console.error('Error fetching donors by user:', error);
+    throw new Error('Failed to fetch donors by user');
+  }
+}
+
+//GET DONATION BY CAMPAIGN
+export async function getDonationByCampaign(compaignId:string) {
+  try {
+    await connectToDatabase()
+
+    if (!compaignId) throw new Error('compaign ID is required')
+    const compaignObjectId = new ObjectId(compaignId)
+
+    const comraised = await ComRaised.aggregate([
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'donor',
+          foreignField: '_id',
+          as: 'donor',
+        },
+      },
+      {
+        $unwind: '$donor',
+      },
+      {
+        $lookup: {
+          from: 'compaigns',
+          localField: 'compaign',
+          foreignField: '_id',
+          as: 'compaign',
+        },
+      },
+      {
+        $unwind: '$compaign',
+      },
+      {
+        $project: {
+          _id: 1,
+          raisedAmount: 1,
+          createdAt: 1,
+          compaignTitle: '$compaign.title',
+          compaignId: '$compaign._id',
+          donor: {
+            $concat: ['$donor.firstName', ' ', '$donor.lastName'],
+          },
+          donorEmail: '$donor.email',
+        },
+      },
+      {
+        $match: {
+          $and: [{ compaignId: compaignObjectId }],
+        },
+      },
+    ])
+
+    return JSON.parse(JSON.stringify(comraised))
+  } catch (error) {
+    handleError(error)
+  }
+}
+

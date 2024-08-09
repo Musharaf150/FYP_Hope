@@ -6,6 +6,9 @@ import { Button } from '../ui/button'
 import { IEvent } from '@/lib/database/models/event.model'
 import { checkoutOrder } from '@/lib/actions/order.actions';
 import { createVolunteer, hasVolunteered } from '@/lib/actions/volunteer.actions';
+import { auth } from '@clerk/nextjs/server';
+import { useUser } from '@clerk/nextjs';
+import { formatDateTime } from '@/lib/utils';
 
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
@@ -13,9 +16,17 @@ import { createVolunteer, hasVolunteered } from '@/lib/actions/volunteer.actions
 loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const Checkout = ({event, userId}: {event: IEvent, userId: string}) => {
+  const { user } = useUser(); // Get user data using Clerk's useUser hook
   const [hasApplied, setHasApplied] = useState<Record<string, boolean | undefined>>({});
   const [loading, setLoading] = useState<boolean>(true);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (user) {
+      // Use user.firstName or other properties based on the user object structure
+      setUserEmail(user.primaryEmailAddress?.emailAddress ?? null); // Adjust based on actual structure
+    }
+  }, [user]);
 
     useEffect(() => {
         // Check to see if this is a redirect back from Checkout
@@ -66,9 +77,11 @@ const Checkout = ({event, userId}: {event: IEvent, userId: string}) => {
         const volunteer = {
           eventTitle: event.title,
           eventId: event._id,
-          participantId: userId
+          participantId: userId,
+          participantEmail: userEmail ?? 'default@example.com',
+          startDateTime: formatDateTime(event.startDateTime).dateTime
         };
-  
+        
         await createVolunteer(volunteer);
         setHasApplied((prev) => ({ ...prev, [event._id]: true }));// Update state for this event
       } catch (error) {

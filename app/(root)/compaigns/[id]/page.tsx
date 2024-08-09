@@ -1,4 +1,5 @@
 import CompaignsCollection from '@/components/shared/CompaignCollection';
+import RaisedByCampaign from '@/components/shared/RaisedByCampaign';
 import { getCompaignById, getRelatedCompaignByComCategory } from '@/lib/actions/compaign.actions';
 import { formatDateTime } from '@/lib/utils';
 import { SearchParamProps } from '@/types';
@@ -70,7 +71,7 @@ const CompaignDetails = async ({params:{ id}, searchParams}: SearchParamProps) =
                       <span className="text-gray-600">Required</span>
                   </div>
                   <div className="flex items-center justify-between text-sm mt-1">
-                      <span>Rs. 2,528</span>
+                      <RaisedByCampaign compaignId={compaign._id} />
                       <span className="text-gray-600">Raised</span>
                   </div>
 

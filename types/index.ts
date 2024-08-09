@@ -167,7 +167,7 @@ export type DeleteCompaignParams = {
 }
 
 export type GetAllCompaignsParams = {
-  query: string
+  camquery: string
   comCategory: string
   limit: number
   page: number
@@ -241,6 +241,10 @@ export type ComRaisedProps ={
   },
   donorId: string,
 }
+export type GetDonorsByUserParams = {
+  donorId: string
+  searchString: string
+}
 
 export type GetComRaisedByUserParams = {
   userId: string | null
@@ -277,7 +281,10 @@ export type TotalDonationProps ={
 //VOLUNTEER PARAMS
 export type CreateVolunteerParams = {
   eventId: string
+  eventTitle:string
+  startDateTime: string
   participantId: string
+  participantEmail: string
   createdAt?: Date
 }
 
@@ -298,6 +305,12 @@ export type GetAllStoriesParams = {
   comCategory: string
   limit: number
   page: number
+}
+export type GetRelatedStoryByComCategoryParams = {
+  comCategoryId: string
+  storyId: string
+  limit?: number
+  page: number | string
 }
 
   // ====== URL QUERY PARAMS

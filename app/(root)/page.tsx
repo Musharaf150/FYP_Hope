@@ -10,13 +10,14 @@ import CategoryFilter from "@/components/shared/CategoryFilter";
 import { getAllCompaigns } from "@/lib/actions/compaign.actions";
 import CompaignCollection from "@/components/shared/CompaignCollection";
 import ComCategoryFilter from "@/components/shared/ComCategoryFilter";
+import CamSearch from "@/components/shared/CamSearch";
 
 
 export default async function Home({searchParams}: SearchParamProps) {
   const page = Number(searchParams?.page) || 1;
   const eventsearchText = (searchParams?.query as string) ||" ";
   const category = (searchParams?.category as string) || '';
-  const compaignsearchText = (searchParams?.query as string) ||" ";
+  const compaignsearchText = (searchParams?.camquery as string) ||" ";
   const comCategory = (searchParams?.comCategory as string) || '';
 
 
@@ -28,7 +29,7 @@ export default async function Home({searchParams}: SearchParamProps) {
   });
 
   const compaigns = await getAllCompaigns({
-    query:"",
+    camquery:compaignsearchText,
     comCategory,
     page,
     limit: 6
@@ -86,20 +87,13 @@ export default async function Home({searchParams}: SearchParamProps) {
 
         </section>
 
-    {/* <section id="events" className="wrapper my-8 flex flex-col
-    gap-8 md:gap-12">
-      <h2 className="h2-bold"></h2>
-
-      <div className="flex w-full flex-col gap-5 md:flex-row">
-        
-      </div>
-    </section> */}
+  
 
 <section id="events" className="wrapper my-8 flex flex-col gap-8 md:gap-12">
         <h2 className="h2-bold">Thousands of Compaigns</h2>
 
         <div className="flex w-full flex-col gap-5 md:flex-row">
-          {/* <Search/> */}
+          <CamSearch/>
           <ComCategoryFilter/>
         </div>
         

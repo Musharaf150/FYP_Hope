@@ -1,6 +1,7 @@
 import React from 'react'
 import { ICompaign } from '@/lib/database/models/compaign.model'
 import CompaignCard from './CompaignCard'
+import Pagination from './Pagination'
 
 
 
@@ -41,9 +42,9 @@ const CompaignsCollection = ({
           })}
         </ul>
 
-        {/* {totalPages > 1 && (
+        {totalPages > 1 && (
           <Pagination urlParamName={urlParamName} page={page} totalPages={totalPages} />
-        )} */}
+        )}
       </div>
     ): (
       <div className="flex-center wrapper min-h-[200px] w-full flex-col gap-3 rounded-[14px] bg-grey-50 py-28 text-center">

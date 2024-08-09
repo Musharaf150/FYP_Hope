@@ -11,7 +11,10 @@ export const getAllComCategories = async () => {
 
     const comCategories = await ComCategory.find();
 
+    
     return JSON.parse(JSON.stringify(comCategories));
+
+    
   } catch (error) {
     handleError(error)
   }

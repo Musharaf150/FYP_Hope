@@ -5,6 +5,8 @@ import React from 'react'
 import { auth } from '@clerk/nextjs/server'
 import { ICompaign } from '@/lib/database/models/compaign.model'
 import CompaignDonateButton from './CompaignDonateButton'
+import { IComRaised } from '@/lib/database/models/comraised.model'
+import RaisedByCampaign from './RaisedByCampaign'
 
 type CardProps = {
   compaign: ICompaign
@@ -14,6 +16,7 @@ const Card = ({ compaign}: CardProps) => {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
 
+  
 
 
   return (
@@ -64,7 +67,8 @@ const Card = ({ compaign}: CardProps) => {
                       <span className="text-gray-600">Required</span>
                   </div>
                   <div className="flex items-center justify-between text-sm mt-1">
-                      <span>Rs. 2,528</span>
+
+                  {<RaisedByCampaign compaignId={compaign._id} />}
                       <span className="text-gray-600">Raised</span>
                   </div>
 

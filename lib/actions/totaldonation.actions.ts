@@ -155,4 +155,41 @@ export async function getDonationsForCurrentMonth(donorId: string) {
   }
 }
 
+export async function getTotalDonationsByMonthAndUser(
+  createdAfter: Date | null,
+  createdBefore: Date | null
+) {
+  const donationQuery: any = {};
+  if (createdAfter) donationQuery.createdAt = { $gte: createdAfter };
+  if (createdBefore) donationQuery.createdAt = { ...donationQuery.createdAt, $lte: createdBefore };
 
+  console.log('Donation Query:', donationQuery);
+
+  const donations = await Totaldonation.aggregate([
+    {
+        $project: {
+            month: { $month: '$createdAt' },
+            year: { $year: '$createdAt' },
+            amount: { $toDouble: '$amount' },
+        },
+    },
+    {
+        $group: {
+            _id: { month: '$month', year: '$year' },
+            totalAmount: { $sum: '$amount' },
+        },
+    },
+    {
+        $sort: { '_id.year': 1, '_id.month': 1 },
+    },
+]);
+
+  console.log('Total Donations Data:', donations);
+
+  // Format data for use in graphs
+  return donations.map(donation => ({
+    userId: donation._id.userId,
+    month: `${donation._id.year}-${donation._id.month}`,
+    totalDonations: donation.totalDonations,
+  }));
+}

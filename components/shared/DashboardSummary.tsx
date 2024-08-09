@@ -5,6 +5,7 @@ import { CalendarDays, CalendarSearch, Caravan, DollarSign } from 'lucide-react'
 import { auth } from '@clerk/nextjs/server';
 import { getOrdersByUser } from '@/lib/actions/order.actions';
 import { getVolunteerByUser } from '@/lib/actions/volunteer.actions';
+import { getRaisedByUser } from '@/lib/actions/comraised.actions';
 
 
 const DashboardSummary = async () => {
@@ -28,6 +29,12 @@ const DashboardSummary = async () => {
   }
   const {volunteersCount} = volunteerResponse
 
+  const campaignCount = await getRaisedByUser({userId,page:1})
+  if(!campaignCount){
+    throw new Error('Failed to fetch Donated Campaigns by User')
+  }
+  const {raisedCount} = campaignCount;
+
 
 
   const data = [
@@ -45,9 +52,9 @@ const DashboardSummary = async () => {
     },
     {
       label: "Donated Campaigns",
-      amount: "3",
+      amount: raisedCount.toString(),
       icon: Caravan,
-      route: '/dashboard/mytickets'
+      route: '/dashboard/mycampaigns'
     },
     {
       label: "Volunteered Events",

@@ -6,6 +6,7 @@ import Volunteer from "../database/models/volunteer.model";
 import { handleError } from "../utils";
 import User from "../database/models/user.model";
 import Event from "../database/models/event.model";
+import { sendVolunteerEmail } from '@/lib/email.service';
 
 export const createVolunteer = async (participant:CreateVolunteerParams) => {
     try {
@@ -19,9 +20,11 @@ export const createVolunteer = async (participant:CreateVolunteerParams) => {
 
       console.log(newVolunteer)
   
-      
-  
+    
+      await sendVolunteerEmail(participant.participantEmail, participant.eventTitle, participant.startDateTime);
       return JSON.parse(JSON.stringify(newVolunteer));
+      
+
       
     } catch (error) {
       handleError(error);

@@ -35,11 +35,11 @@ export async function getCompaignById(compaignId: string) {
   }
 }
 
-export async function getAllCompaigns({ query, limit = 6, page, comCategory }: GetAllCompaignsParams) {
+export async function getAllCompaigns({ camquery, limit = 6, page, comCategory }: GetAllCompaignsParams) {
     try {
       await connectToDatabase()
   
-      const titleCondition = query ? { title: { $regex: query, $options: 'i' } } : {}
+      const titleCondition = camquery ? { title: { $regex: camquery, $options: 'i' } } : {}
       const categoryCondition = comCategory ? await getCategoryByName(comCategory) : null
       const conditions = {
         $and: [titleCondition, categoryCondition ? { comCategory: categoryCondition._id } : {}],

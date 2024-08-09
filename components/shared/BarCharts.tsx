@@ -1,9 +1,12 @@
 "use client";
 
 import { brdata } from "@/app/dummydata";
-import { Bar, BarChart ,ResponsiveContainer, XAxis, YAxis} from "recharts";
+import { Bar, BarChart ,ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 
-export default function BarCharts() {
+export default async function BarCharts() {
+  
+  
+
   return (
     <ResponsiveContainer width={'100%'} height={350}>
         <BarChart data={brdata}>
@@ -20,6 +23,7 @@ export default function BarCharts() {
             fontSize={12}
             tickFormatter={(value)=> `$${value}`}
             />
+            <Tooltip cursor={{fill: "hsl(var(--muted))"}}/>
             <Bar dataKey={'donation'}
             fill="#FF4162"
             radius={[4,4,0,0]}/>

@@ -30,7 +30,7 @@ const Services = () => {
             icon="🎉"
             bgColor="bg-green-900"
           />
-          <Link href="/successtories">
+          <Link href="/stories">
           <ServiceCard 
             title="Donor Wall"
             icon="🏆"
